@@ -42,7 +42,6 @@ def get_proxies():
                 logger.error("Invalid proxy url: %s", proxy_url)
                 continue
             proxies.append(proxy_url)
-            logger.info("One more proxy!")
     except Exception as e:
         logger.error("Error while getting proxies: %s", e)
     return proxies
