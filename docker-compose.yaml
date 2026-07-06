@@ -1,0 +1,18 @@
+﻿services:
+  proxy-exporter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: proxy-exporter
+    restart: unless-stopped
+    ports:
+      - "${PROMETHEUS_SERVER_PORT:-8888}:${PROMETHEUS_SERVER_PORT:-8888}"
+    volumes:
+      - ./proxys.json:/app/proxys.json:ro
+    environment:
+      - JSON_PATH=/app/proxys.json
+      - TEST_URL=http://httpbin.org/ip
+      - CHECK_INTERVAL=10
+      - REQUEST_TIMEOUT=5
+      - PROMETHEUS_SERVER_PORT=8888
+      - PYTHONUNBUFFERED=1

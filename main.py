@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 IS_PROXY_UP = Gauge("is_proxy_up", "Health status of proxy", ['proxy_ip'])
 PROXY_LATENCY = Gauge("proxy_latency_ms", "Latency of proxy", ['proxy_ip'])
 
-JSON_PATH = os.getenv("JSON_PATH", "/root/proxys.json")
+JSON_PATH = os.getenv("JSON_PATH", "proxys.json")
 TEST_URL = os.getenv("TEST_URL", "http://httpbin.org/ip")
 CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL", 10))
 REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", 5))
@@ -42,6 +42,7 @@ def get_proxies():
                 logger.error("Invalid proxy url: %s", proxy_url)
                 continue
             proxies.append(proxy_url)
+            logger.info("One more proxy!")
     except Exception as e:
         logger.error("Error while getting proxies: %s", e)
     return proxies
@@ -71,7 +72,7 @@ async def check_proxy(proxy_url):
 async def check_loop():
     while True:
         proxies = get_proxies()
-        if not proxies:
+        if proxies:
             tasks = [check_proxy(proxy_url) for proxy_url in proxies]
             await asyncio.gather(*tasks)
         else:

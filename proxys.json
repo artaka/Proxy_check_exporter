@@ -1,0 +1,8 @@
+{
+  "servers": [
+    {
+      "in_use": true,
+      "url": "http://username:password@ip:port"
+    }
+  ]
+}
